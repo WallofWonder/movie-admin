@@ -47,11 +47,60 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    hidden: true,
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '控制台', icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'Area',
+    children: [{
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/user/index'),
+      meta: { title: '用户管理', icon: 'user' }
+    }]
+  },
+  {
+    path: '/area',
+    component: Layout,
+    redirect: '/area/index',
+    name: 'Area',
+    children: [{
+      path: 'index',
+      name: 'Index',
+      component: () => import('@/views/area/index'),
+      meta: { title: '地域管理', icon: 'area' }
+    }]
+  },
+  {
+    path: '/cinema',
+    component: Layout,
+    redirect: '/cinema/index',
+    name: 'Cinema',
+    children: [{
+      path: 'index',
+      name: 'Index',
+      // component: () => import('@/views/table/index'),
+      meta: { title: '影院管理', icon: 'cinema' }
+    }]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/index',
+    name: 'Order',
+    children: [{
+      path: 'index',
+      name: 'Index',
+      // component: () => import('@/views/table/index'),
+      meta: { title: '订单管理', icon: 'order' }
     }]
   },
 
