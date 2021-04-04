@@ -59,7 +59,7 @@ export const constantRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/user/list',
-    name: 'Area',
+    name: 'User',
     children: [{
       path: 'list',
       name: 'List',
@@ -70,13 +70,21 @@ export const constantRoutes = [
   {
     path: '/area',
     component: Layout,
-    redirect: '/area/index',
+    redirect: '/area/province',
     name: 'Area',
+    alwaysShow: true,
+    meta: { title: '地域管理', icon: 'area' },
     children: [{
-      path: 'index',
-      name: 'Index',
+      path: 'province',
+      name: 'Province',
       component: () => import('@/views/area/index'),
-      meta: { title: '地域管理', icon: 'area' }
+      meta: { title: '省份列表', icon: 'area' }
+    },
+    {
+      path: 'city',
+      name: 'city',
+      component: () => import('@/views/area/index'),
+      meta: { title: '城市列表', icon: 'area' }
     }]
   },
   {

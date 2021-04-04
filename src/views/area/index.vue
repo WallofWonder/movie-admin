@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1 class="el-icon-location"> 地域列表</h1>
+    <h1 class="el-icon-location"> 省份列表</h1>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -15,30 +15,26 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column align="center" label="编号" width="95">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column align="center" label="名称" width="110">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          {{ scope.row.dbName }}
         </template>
       </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
+      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.createTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="created_at" label="修改时间" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time"/>
+          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -46,8 +42,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
-
+import { getProvince } from '@/api/area'
 export default {
   filters: {
     statusFilter(status) {
@@ -71,8 +66,9 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
+      getProvince().then(response => {
+        console.log(response)
+        this.list = response.data.body.list
         this.listLoading = false
       })
     }
