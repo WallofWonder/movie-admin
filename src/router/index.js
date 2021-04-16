@@ -81,6 +81,19 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/movie',
+    component: Layout,
+    redirect: '/movie/list',
+    name: 'Movie',
+    meta: { title: '影片管理', icon: 'movie' },
+    children: [{
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/movie/index'),
+      meta: { title: '影片管理', icon: 'movie' }
+    }]
+  },
+  {
     path: '/cinema',
     component: Layout,
     redirect: '/cinema/index',

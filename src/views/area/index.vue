@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { getAllAreas, fetchList } from '@/api/area'
+import { fetchList } from '@/api/area'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -129,14 +129,6 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.list
         this.total = response.data.total
-        this.listLoading = false
-      })
-    },
-    fetchData() {
-      this.listLoading = true
-      getAllAreas().then(response => {
-        console.log(response)
-        this.list = response.data.list
         this.listLoading = false
       })
     },
