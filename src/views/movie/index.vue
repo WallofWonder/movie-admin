@@ -17,7 +17,7 @@
       </el-table-column>
       <el-table-column align="center" label="海报" width="150">
         <template slot-scope="{row}">
-          <el-image style="width: 100px; height: 140px" :src="row.picture" fit="contain" />
+          <el-image style="width: 100px; height: 140px" :src="picURL + row.picture" fit="contain" />
         </template>
       </el-table-column>
       <el-table-column align="center" label="名称" width="150px">
@@ -90,6 +90,7 @@ export default {
   },
   data() {
     return {
+      picURL: this.$root.PIC_URL,
       list: null,
       listLoading: true,
       total: 0,

@@ -44,6 +44,11 @@ Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
+  data: function() {
+    return {
+      PIC_URL: 'http://192.168.0.11/'
+    }
+  },
   router,
   store,
   render: h => h(App)
