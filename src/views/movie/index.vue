@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1 class="el-icon-location"> 影片管理</h1>
+    <h1 class="el-icon-film"> 影片管理</h1>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -13,6 +13,11 @@
       <el-table-column prop="id" align="center" label="编号" width="95">
         <template slot-scope="{row}">
           {{ row.id }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="海报" width="150">
+        <template slot-scope="{row}">
+          <el-image style="width: 100px; height: 140px" :src="row.picture" fit="contain" />
         </template>
       </el-table-column>
       <el-table-column align="center" label="名称" width="150px">
@@ -39,13 +44,13 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="{row}">
-          <i class="el-icon-time"/>
+          <i class="el-icon-time" />
           <span>{{ row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="修改时间" width="200">
         <template slot-scope="{row}">
-          <i class="el-icon-time"/>
+          <i class="el-icon-time" />
           <span>{{ row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
@@ -64,7 +69,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" @current-change="pageChanged"/>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" @current-change="pageChanged" />
 
   </div>
 </template>
