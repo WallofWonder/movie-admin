@@ -127,10 +127,9 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.body.list
-        this.total = response.data.body.total
+        this.list = response.data.list
+        this.total = response.data.total
         this.listLoading = false
-        console.log(this.listQuery.pageNum)
       })
     },
     fetchData() {
