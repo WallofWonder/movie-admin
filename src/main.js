@@ -11,6 +11,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import axios from 'axios'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -53,3 +54,6 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.put['Content-Type'] = 'application/json'

@@ -1,6 +1,19 @@
 <template>
   <div class="app-container">
     <h1 class="el-icon-film"> 影片管理</h1>
+    <div class="filter-container">
+      <el-input
+        v-model="searchByName"
+        class="filter-item"
+        placeholder="输入影片名称进行搜索"
+        prefix-icon="el-icon-search"
+        style="width: 200px;"
+      />
+      <el-button type="primary" class="filter-item">
+        <i class="el-icon-refresh" />
+        获取最新电影信息
+      </el-button>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -42,6 +55,11 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="评分">
+        <template slot-scope="scope">
+          {{ scope.row.rate === null ? '暂无评分' : scope.row.rate }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="{row}">
           <i class="el-icon-time" />
@@ -54,28 +72,49 @@
           <span>{{ row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.isShow === false" size="mini" type="success" @click="handleStatus(row)">
-            上映
-          </el-button>
-          <el-button v-else size="mini" type="danger" @click="handleStatus(row)">
-            下架
-          </el-button>
-        </template>
-      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" @current-change="pageChanged" />
 
+    <el-dialog title="编辑电影信息" :visible.sync="dialogFormVisible">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="片名" prop="dbname">
+          <el-input v-model="form.dbName" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="导演" prop="director">
+          <el-input v-model="form.directedBy" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="主演" prop="actor">
+          <el-input v-model="form.actor" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="是否上映" prop="isShow">
+          <el-switch v-model="form.isShow" />
+        </el-form-item>
+        <el-form-item label="评分" prop="rate">
+          <el-input v-model="form.rate" oninput="value=value.replace(/[^0-9.]/g,'')" />
+        </el-form-item>
+        <el-form-item label="简介" prop="info">
+          <el-input
+            v-model="form.info"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            type="textarea"
+            maxlength="200"
+            show-word-limit
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateData(form)">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getMovies } from '@/api/movie'
+import { getMovies, updateMovie } from '@/api/movie'
+import { Message } from 'element-ui'
+import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -96,6 +135,31 @@ export default {
       total: 0,
       provinceSelects: null,
       citySelects: null,
+      searchByName: null,
+      // 对话框表单
+      dialogFormVisible: false,
+      form: {
+        id: '',
+        createTime: '',
+        updateTime: '',
+        actor: '',
+        area: false,
+        directedBy: '',
+        info: '',
+        language: '',
+        dbName: '',
+        picture: '',
+        rate: '',
+        type: '',
+        isShow: true
+      },
+      rules: {
+        dbname: [
+          { required: true, message: '请输入片名', trigger: 'blur' },
+          { min: 1, message: '长度至少为1个字符', trigger: 'blur' }
+        ]
+      },
+      // 分页参数
       listQuery: {
         pageSize: 10,
         pageNum: 1,
@@ -104,6 +168,9 @@ export default {
     }
   },
   created() {
+    this.getList()
+  },
+  activated() {
     this.getList()
   },
   methods: {
@@ -142,9 +209,20 @@ export default {
     },
     handleUpdate(row) {
       // todo 弹出框显示电影信息
-      console.log(row)
+      this.form = Object.assign({}, row)
+      this.dialogFormVisible = true
     },
-    updateData() {
+    updateData(form) {
+      form.updateTime = moment().format('YYYY-MM-DD HH:mm:ss')
+      updateMovie(form).then(response => {
+        Message({
+          message: '更新成功!',
+          type: 'success',
+          duration: 3 * 1000
+        })
+        this.getList()
+      })
+      this.dialogFormVisible = false
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort // 'id asc'

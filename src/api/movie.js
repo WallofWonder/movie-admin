@@ -7,17 +7,19 @@ export function getMovies(query) {
   })
 }
 
-export function getMovieDetail(id) {
+export function refreshMovieData() {
   return request({
-    url: 'http://localhost:8888/admin/movies/detail?id=' + id,
-    method: 'get'
+    url: 'http://localhost:8888/admin/movies/data',
+    method: 'post'
   })
 }
 
 export function updateMovie(body) {
+  body = JSON.stringify(body)
+  console.log(body)
   return request({
     url: 'http://localhost:8888/admin/movies/update',
     method: 'post',
-    body
+    data: body
   })
 }

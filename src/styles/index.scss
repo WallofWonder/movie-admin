@@ -73,3 +73,13 @@ div:focus {
     color: rgb(32, 160, 255);
   }
 }
+
+.filter-container {
+  padding-bottom: 10px;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
