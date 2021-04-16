@@ -62,13 +62,13 @@
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="修改时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.updateTime }}</span>
+          <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
@@ -136,7 +136,7 @@ export default {
       this.listLoading = true
       getAllAreas().then(response => {
         console.log(response)
-        this.list = response.data.body.list
+        this.list = response.data.list
         this.listLoading = false
       })
     },
