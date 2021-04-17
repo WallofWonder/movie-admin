@@ -30,13 +30,18 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { email, pwd } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ email: email, pwd: pwd }).then(response => {
+        console.log('login response：')
+        console.log(response)
+        if (response.code !== 200) {
+          resolve(response)
+        }
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        resolve()
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
@@ -45,6 +50,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    console.log(state)
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
@@ -53,10 +59,10 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { username, headPic } = data
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_NAME', username)
+        commit('SET_AVATAR', headPic)
         resolve(data)
       }).catch(error => {
         reject(error)
