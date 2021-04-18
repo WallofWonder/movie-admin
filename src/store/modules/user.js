@@ -12,6 +12,8 @@ const getDefaultState = () => {
 
 const state = getDefaultState()
 
+const picURL = 'http://192.168.0.11/'
+
 const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
@@ -23,7 +25,7 @@ const mutations = {
     state.name = name
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+    state.avatar = picURL + avatar
   }
 }
 
