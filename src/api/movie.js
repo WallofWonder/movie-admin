@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
 export function getMovies(query) {
+  var byName = (query.searchByName === '' || query.searchByName === null) ? '' : query.searchByName
   return request({
-    url: 'http://localhost:8888/admin/movies/list?pageSize=' + query.pageSize + '&pageNum=' + query.pageNum + '&orderBy=' + query.orderBy + '&isShow=-1',
+    url: 'http://localhost:8888/admin/movies/list?pageSize=' + query.pageSize + '&pageNum=' + query.pageNum + '&orderBy=' + query.orderBy + '&dbname=' + byName,
     method: 'get'
   })
 }

@@ -3,12 +3,13 @@
     <h1 class="el-icon-film"> 影片管理</h1>
     <div class="filter-container">
       <el-input
-        v-model="searchByName"
+        v-model="listQuery.searchByName"
         class="filter-item"
         placeholder="输入影片名称进行搜索"
         prefix-icon="el-icon-search"
         style="width: 200px;"
       />
+      <el-button class="filter-item" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button type="primary" class="filter-item">
         <i class="el-icon-refresh" />
         获取最新电影信息
@@ -135,7 +136,6 @@ export default {
       total: 0,
       provinceSelects: null,
       citySelects: null,
-      searchByName: null,
       // 对话框表单
       dialogFormVisible: false,
       form: {
@@ -159,8 +159,9 @@ export default {
           { min: 1, message: '长度至少为1个字符', trigger: 'blur' }
         ]
       },
-      // 分页参数
+      // 分页参数 + 搜索标题
       listQuery: {
+        searchByName: null,
         pageSize: 10,
         pageNum: 1,
         orderBy: 'id ASC'
@@ -175,6 +176,7 @@ export default {
   },
   methods: {
     getList() {
+      console.log('getlist')
       this.listLoading = true
       getMovies(this.listQuery).then(response => {
         this.list = response.data.list
