@@ -21,3 +21,18 @@ export function fetchList(query) {
     method: 'get'
   })
 }
+
+/**
+ * 获取城市内地区列表
+ * @param cityId 城市代码
+ * @returns {AxiosPromise}
+ */
+export function getArea(cityId) {
+  return request({
+    url: base_url + 'admin/areas/listbycity',
+    method: 'get',
+    params: {
+      cityid: cityId
+    }
+  })
+}

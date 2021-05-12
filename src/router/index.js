@@ -101,7 +101,7 @@ export const constantRoutes = [
     children: [{
       path: 'index',
       name: 'Index',
-      // component: () => import('@/views/table/index'),
+      component: () => import('@/views/cinema/index'),
       meta: { title: '影院管理', icon: 'cinema' }
     }]
   },

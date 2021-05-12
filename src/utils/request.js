@@ -58,15 +58,15 @@ service.interceptors.response.use(
       // 999: Token expired;
       if (res.code === 400 || res.code === 500 || res.code === 999) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
+        // MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+        //   confirmButtonText: 'Re-Login',
+        //   cancelButtonText: 'Cancel',
+        //   type: 'warning'
+        // }).then(() => {
+        //   store.dispatch('user/resetToken').then(() => {
+        //     location.reload()
+        //   })
+        // })
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
