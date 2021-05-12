@@ -45,15 +45,17 @@ export const constantRoutes = [
 
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    hidden: true,
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '控制台', icon: 'dashboard' }
-    }]
+    redirect: '/account',
+    hidden: true
+    // component: Layout,
+    // redirect: '/dashboard',
+    // hidden: true,
+    // children: [{
+    //   path: 'dashboard',
+    //   name: 'Dashboard',
+    //   component: () => import('@/views/dashboard/index'),
+    //   meta: { title: '控制台', icon: 'dashboard' }
+    // }]
   },
   {
     path: '/account',
@@ -70,6 +72,7 @@ export const constantRoutes = [
   {
     path: '/area',
     component: Layout,
+    hidden: true,
     redirect: '/area/list',
     name: 'Area',
     meta: { title: '地域管理', icon: 'area' },
