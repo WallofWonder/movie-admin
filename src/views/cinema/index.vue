@@ -54,27 +54,34 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="{row}">
-          <i class="el-icon-time"/>
+          <i class="el-icon-time" />
           <span>{{ row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="修改时间" width="200">
         <template slot-scope="{row}">
-          <i class="el-icon-time"/>
+          <i class="el-icon-time" />
           <span>{{ row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="query.pageNum" :limit.sync="query.pageSize" @pagination="getList" @current-change="pageChanged"/>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="query.pageNum"
+      :limit.sync="query.pageSize"
+      @pagination="getList"
+      @current-change="pageChanged"
+    />
 
-    <el-dialog title="编辑影院信息" :visible.sync="dialogFormVisible">
+    <el-dialog title="编辑影院信息" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules">
         <el-form-item label="名称" prop="dbname">
-          <el-input v-model="form.dbName" autocomplete="off"/>
+          <el-input v-model="form.dbName" autocomplete="off" />
         </el-form-item>
         <el-form-item label="地址" prop="dbname">
-          <el-input v-model="form.address" autocomplete="off"/>
+          <el-input v-model="form.address" autocomplete="off" />
         </el-form-item>
         <el-form-item label="服务" prop="dbname">
           <el-tag
@@ -109,7 +116,6 @@
 
 <script>
 import { Message } from 'element-ui'
-import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 import global from '@/utils/global'

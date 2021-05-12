@@ -24,7 +24,7 @@ const users = {
 }
 
 export default [
-  // user login
+  // account login
   {
     url: '/vue-admin-template/user/login',
     type: 'post',
@@ -47,7 +47,7 @@ export default [
     }
   },
 
-  // get user info
+  // get account info
   {
     url: '/vue-admin-template/user/info\.*',
     type: 'get',
@@ -59,7 +59,7 @@ export default [
       if (!info) {
         return {
           code: 500,
-          message: 'Login failed, unable to get user details.'
+          message: 'Login failed, unable to get account details.'
         }
       }
 
@@ -70,7 +70,7 @@ export default [
     }
   },
 
-  // user logout
+  // account logout
   {
     url: '/vue-admin-template/user/logout',
     type: 'post',

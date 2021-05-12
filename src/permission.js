@@ -17,7 +17,7 @@ router.beforeEach(async(to, from, next) => {
   // set page title
   document.title = getPageTitle(to.meta.title)
 
-  // determine whether the user has logged in
+  // determine whether the account has logged in
   const hasToken = getToken()
 
   if (hasToken) {
@@ -31,7 +31,7 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
-          // get user info
+          // get account info
           await store.dispatch('user/getInfo')
 
           next()

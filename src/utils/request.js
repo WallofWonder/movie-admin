@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -63,7 +63,7 @@ service.interceptors.response.use(
         //   cancelButtonText: 'Cancel',
         //   type: 'warning'
         // }).then(() => {
-        //   store.dispatch('user/resetToken').then(() => {
+        //   store.dispatch('account/resetToken').then(() => {
         //     location.reload()
         //   })
         // })
