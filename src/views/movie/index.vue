@@ -10,10 +10,6 @@
         style="width: 200px;"
       />
       <el-button class="filter-item" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      <el-button type="primary" class="filter-item">
-        <i class="el-icon-refresh" />
-        获取最新电影信息
-      </el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -118,6 +114,7 @@ import { Message } from 'element-ui'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
+import global from '@/utils/global'
 
 export default {
   components: { Pagination },
@@ -130,7 +127,7 @@ export default {
   },
   data() {
     return {
-      picURL: this.$root.PIC_URL,
+      picURL: global.BASE_IMG,
       list: null,
       listLoading: true,
       total: 0,

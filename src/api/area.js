@@ -1,15 +1,23 @@
 import request from '@/utils/request'
+import global from '@/utils/global'
+
+const base_url = global.BASE_API
 
 export function getAllAreas() {
   return request({
-    url: 'http://localhost:8888/admin/areas/list',
+    url: base_url + 'admin/areas/list',
     method: 'get'
   })
 }
 
 export function fetchList(query) {
   return request({
-    url: 'http://localhost:8888/admin/areas/list?pageSize=' + query.pageSize + '&pageNum=' + query.pageNum + '&orderBy=' + query.orderBy,
+    url: base_url + 'admin/areas/list',
+    params: {
+      pageSize: query.pageSize,
+      pageNum: query.pageNum,
+      orderBy: query.orderBy
+    },
     method: 'get'
   })
 }
