@@ -30,7 +30,7 @@
           <el-image style="width: 100px; height: 140px" :src="picURL + row.picture" fit="contain" />
         </template>
       </el-table-column>
-      <el-table-column align="center" label="名称" width="150px">
+      <el-table-column align="center" label="名称" width="200px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.dbName }}</span>
         </template>
@@ -45,16 +45,21 @@
           {{ row.actor }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="状态" width="100px">
-        <template slot-scope="{row}">
-          <el-tag :type="row.isShow | statusFilter">
-            {{ row.isShow === true ? '在映中' : '未在映' }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="评分">
+      <!--      <el-table-column align="center" label="状态" width="100px">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <el-tag :type="row.isShow | statusFilter">-->
+      <!--            {{ row.isShow === true ? '在映中' : '未在映' }}-->
+      <!--          </el-tag>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column align="center" label="评分" width="100">
         <template slot-scope="scope">
-          {{ scope.row.rate === null ? '暂无评分' : scope.row.rate }}
+          <em v-if="scope.row.rate !== null" style="color: #ff9900;font-size: 20px">
+            {{ scope.row.rate.toFixed(1) }}
+          </em>
+          <em v-else style="color: #ff9900;">
+            暂无评分
+          </em>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
@@ -71,9 +76,16 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" @current-change="pageChanged" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.pageNum"
+      :limit.sync="listQuery.pageSize"
+      @pagination="getList"
+      @current-change="pageChanged"
+    />
 
-    <el-dialog title="编辑电影信息" :visible.sync="dialogFormVisible">
+    <el-dialog title="编辑电影信息" :visible.sync="dialogFormVisible" width="600px">
       <el-form :model="form" :rules="rules">
         <el-form-item label="片名" prop="dbname">
           <el-input v-model="form.dbName" autocomplete="off" />
@@ -84,11 +96,11 @@
         <el-form-item label="主演" prop="actor">
           <el-input v-model="form.actor" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="是否上映" prop="isShow">
-          <el-switch v-model="form.isShow" />
-        </el-form-item>
+        <!--        <el-form-item label="是否上映" prop="isShow">-->
+        <!--          <el-switch v-model="form.isShow" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="评分" prop="rate">
-          <el-input v-model="form.rate" oninput="value=value.replace(/[^0-9.]/g,'')" />
+          <el-input-number v-model="form.rate" :precision="1" :step="0.1" :max="10" />
         </el-form-item>
         <el-form-item label="简介" prop="info">
           <el-input
@@ -173,7 +185,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log('getlist')
       this.listLoading = true
       getMovies(this.listQuery).then(response => {
         this.list = response.data.list
@@ -212,7 +223,7 @@ export default {
     },
     updateData(form) {
       form.updateTime = moment().format('YYYY-MM-DD HH:mm:ss')
-      updateMovie(form).then(response => {
+      updateMovie(form).then(() => {
         Message({
           message: '更新成功!',
           type: 'success',

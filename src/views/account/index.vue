@@ -65,7 +65,7 @@
     <el-dialog title="编辑用户信息" :visible.sync="dialogFormVisible" width="500px">
       <el-form :model="form">
         <el-form-item label="头像">
-          <el-image class="avatar" :src="baseImg + form.headPic"></el-image>
+          <el-image class="avatar" :src="baseImg + form.headPic" />
           <el-button type="primary" size="mini" @click="setDefaultImg">删除头像</el-button>
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
@@ -152,7 +152,7 @@ export default {
       this.dialogFormVisible = true
     },
     freezeAccount(row) {
-      this.$confirm('确认冻结账户' + row.email + '?','警告',{
+      this.$confirm('确认冻结账户' + row.email + '?', '警告', {
         confirmButtonText: '冻结',
         cancelButtonText: '放弃',
         type: 'warning'
@@ -163,7 +163,7 @@ export default {
       })
     },
     unfreezeAccount(row) {
-      this.$confirm('确认解冻账户' + row.email + '?','警告',{
+      this.$confirm('确认解冻账户' + row.email + '?', '警告', {
         confirmButtonText: '解冻',
         cancelButtonText: '放弃',
         type: 'warning'
