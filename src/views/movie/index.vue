@@ -40,7 +40,7 @@
           {{ row.directedBy }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="主演">
+      <el-table-column align="center" label="主演" width="500px">
         <template slot-scope="{row}">
           {{ row.actor }}
         </template>
@@ -95,7 +95,7 @@
             v-model="form.info"
             :autosize="{ minRows: 2, maxRows: 4}"
             type="textarea"
-            maxlength="200"
+            maxlength="230"
             show-word-limit
           />
         </el-form-item>
@@ -207,7 +207,6 @@ export default {
     handleStatus(row) {
     },
     handleUpdate(row) {
-      // todo 弹出框显示电影信息
       this.form = Object.assign({}, row)
       this.dialogFormVisible = true
     },

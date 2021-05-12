@@ -1,15 +1,24 @@
 import request from '@/utils/request'
+import global from '@/utils/global'
+const base_url = global.BASE_API
 
 export function login(data) {
   return request({
-    url: 'http://localhost:8888/user/login?email=' + data.email + '&pwd=' + data.pwd,
+    url: base_url + 'user/login',
+    params: {
+      email: data.email,
+      pwd: data.pwd
+    },
     method: 'post'
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: 'http://localhost:8888/user/info?email=' + token,
+    url: base_url + 'user/info',
+    params: {
+      email: token
+    },
     method: 'get'
   })
 }
