@@ -125,6 +125,7 @@ export const constantRoutes = [
   },
   {
     path: '/session',
+    hidden: true,
     component: Layout,
     redirect: '/session/list',
     name: 'session',
