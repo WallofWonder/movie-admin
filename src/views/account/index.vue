@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1 class=" el-icon-user"> 用户管理</h1>
+    <h1 class=" el-icon-user"> 账户管理</h1>
     <p>共 {{ list.length }} 条数据</p>
     <el-table
       v-loading="listLoading"
@@ -99,8 +99,8 @@ export default {
   filters: {
     sexFilter(sex) {
       const sexMap = [
-        '男',
-        '女'
+        '女',
+        '男'
       ]
       return sexMap[sex]
     },
