@@ -91,3 +91,13 @@ export function list(query) {
     }
   })
 }
+
+export function deleteOrder(orderId) {
+  return request({
+    url: base_url + 'orders/delete',
+    method: 'delete',
+    params: {
+      orderId: orderId
+    }
+  })
+}

@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import global from '@/utils/global'
 
 const getDefaultState = () => {
   return {
@@ -12,7 +13,7 @@ const getDefaultState = () => {
 
 const state = getDefaultState()
 
-const picURL = 'http://192.168.0.11/'
+const picURL = global.BASE_IMG
 
 const mutations = {
   RESET_STATE: (state) => {

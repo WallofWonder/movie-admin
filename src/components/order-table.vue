@@ -26,25 +26,52 @@
               <span>{{ scope.row.showDate + ' ' + scope.row.startTime }}</span>
             </el-form-item>
             <el-form-item label="状态">
+              <!-- 未支付 -->
               <span v-if="scope.row.dbStats === 0" style="color: #e6a23c">
-                未支付
+                <!-- 未结束 -->
+                <span v-if="!isEnded(scope.row.showDate, scope.row.startTime, scope.row.endTime)">
+                  未支付
+                  <el-button size="small" round type="plain" @click="toOrderDetail(scope.row.id)">去支付</el-button>
+                </span>
+                <!-- 已结束 -->
+                <span v-else style="color: #999999">已超时</span>
               </span>
-              <span v-if="scope.row.dbStats === 1" style="color: #42b983">已支付</span>
+              <!-- 已支付 -->
+              <span v-if="scope.row.dbStats === 1" style="color: #42b983">
+                {{ isEnded(scope.row.showDate, scope.row.startTime, scope.row.endTime) ? '已完成' : '已支付' }}
+              </span>
+              <!-- 已取消 -->
               <span v-if="scope.row.dbStats === 2" style="color: #f56c6c">已取消</span>
             </el-form-item>
             <el-form-item label=" ">
+              <!-- 未开始 -->
               <span v-if="!isStarted(scope.row.showDate, scope.row.startTime)">
+                <!-- 未支付 -->
                 <el-button
                   v-if="scope.row.dbStats === 0"
                   type="text"
                   @click="handleCancel(scope.row.id)"
                 >取消订单
                 </el-button>
+                <!-- 已支付 -->
                 <el-button
                   v-if="scope.row.dbStats === 1"
                   type="text"
                   @click="handleRefund(scope.row.id, scope.row.newMoney)"
-                >退款</el-button>
+                >退款
+                </el-button>
+              </span>
+              <!-- （订单超时 || 已完成） || 已取消 -->
+              <span
+                v-if="isEnded(scope.row.showDate, scope.row.startTime, scope.row.endTime) || scope.row.dbStats === 2"
+              >
+                <el-button
+                  type="text"
+                  class="el-icon-delete"
+                  style="color: #f56c6c"
+                  @click="handleDelete(scope.row.id)"
+                >删除订单记录
+                </el-button>
               </span>
             </el-form-item>
           </el-form>
@@ -52,7 +79,7 @@
       </el-table-column>
       <el-table-column align="center" label="卖家" width="300">
         <template slot-scope="scope">
-          <span>{{ scope.row.nickName  +'（' + scope.row.email + '）' }}</span>
+          <span>{{ scope.row.nickName +'（' + scope.row.email + '）' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="movieName" align="center" label="电影" />
@@ -70,10 +97,18 @@
       </el-table-column>
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <strong v-if="scope.row.dbStats === 0" style="color: #e6a23c">未支付</strong>
+          <!-- 未支付 -->
+          <span v-if="scope.row.dbStats === 0">
+            <!-- 已结束 -->
+            <strong v-if="isEnded(scope.row.showDate, scope.row.startTime, scope.row.endTime)" style="color: #999999">已超时</strong>
+            <!-- 未结束 -->
+            <strong v-else style="color: #e6a23c">未支付</strong>
+          </span>
+          <!-- 已支付 -->
           <strong v-if="scope.row.dbStats === 1" style="color: #42b983">
             {{ isEnded(scope.row.showDate, scope.row.startTime, scope.row.endTime) ? '已完成' : '已支付' }}
           </strong>
+          <!-- 已取消 -->
           <strong v-if="scope.row.dbStats === 2" style="color: #f56c6c">已取消</strong>
         </template>
       </el-table-column>
@@ -90,13 +125,13 @@
 </template>
 
 <script>
-import { cancel, list, refund } from '@/api/order'
+import { cancel, deleteOrder, list, refund } from '@/api/order'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
 
 export default {
-  components: { Pagination },
   name: 'OrderTable',
+  components: { Pagination },
   props: [
     'accountId'
   ],
@@ -104,6 +139,7 @@ export default {
     return {
       orders: null,
       tableLoading: false,
+      orderChanged: false,
       total: 0,
       // 分页参数
       listQuery: {
@@ -114,19 +150,24 @@ export default {
       }
     }
   },
+  watch: {
+    orderChanged(ov, nv) {
+      if (nv === true) {
+        this.fetchData()
+      }
+      this.orderChanged = false
+    }
+  },
   created() {
-    if (this.accountId === undefined) this.accountId = -1
     this.fetchData()
   },
   methods: {
     fetchData() {
-      console.log('fetchData')
       this.tableLoading = true
-      this.listQuery.accountId = this.accountId
+      this.listQuery.accountId = (this.accountId === undefined || this.accountId === null) ? -1 : this.accountId
       list(this.listQuery).then(response => {
         this.orders = response.data.list
         this.total = response.data.total
-        console.log(this.total)
         this.tableLoading = false
       }).catch(() => {
         this.tableLoading = false
@@ -140,8 +181,8 @@ export default {
       }).then(() => {
         this.tableLoading = true
         cancel(orderId).then(res => {
-          this.$message.success(res.data.data)
-          this.$emit('orderChanged', true)
+          this.$message.success(res.data)
+          this.orderChanged = true
         })
         this.tableLoading = false
       })
@@ -157,11 +198,28 @@ export default {
           orderId: orderId,
           money: money
         }).then(res => {
-          this.$message.success(res.data.data)
-          this.$emit('orderChanged', true)
+          this.$message.success(res.data)
+          this.orderChanged = true
           this.tableLoading = false
         }).catch(err => {
           this.$message.error(err.response)
+          this.tableLoading = false
+        })
+      })
+    },
+    handleDelete(orderId) {
+      this.$confirm('确定删除此订单记录？', '提示', {
+        confirmButtonText: '删除订单',
+        cancelButtonText: '放弃',
+        type: 'warning'
+      }).then(() => {
+        this.tableLoading = true
+        deleteOrder(orderId).then(res => {
+          this.$message.success(res.data)
+          this.orderChanged = true
+          this.tableLoading = false
+        }).catch(err => {
+          this.$message.error(err)
           this.tableLoading = false
         })
       })
