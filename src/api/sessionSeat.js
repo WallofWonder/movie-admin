@@ -15,7 +15,7 @@ export function listSeats(sessionId) {
 export function listSeatsAsync(sessionId) {
   return new Promise((resolve, reject) => {
     listSeats(sessionId).then(res => {
-      resolve(res.data.data)
+      resolve(res.data)
     }).catch(err => {
       reject(err)
     })
@@ -31,7 +31,7 @@ export function listSeatsByOrder(orderId) {
       },
       method: 'get'
     }).then(res => {
-      resolve(res.data.data)
+      resolve(res.data)
     }).catch(err => {
       reject(err)
     })

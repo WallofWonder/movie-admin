@@ -9,7 +9,7 @@ export function initOrder(data) {
       method: 'post',
       data: data
     }).then(res => {
-      resolve(res.data.data)
+      resolve(res.data)
     }).catch(err => {
       reject(err)
     })
@@ -98,6 +98,19 @@ export function deleteOrder(orderId) {
     method: 'delete',
     params: {
       orderId: orderId
+    }
+  })
+}
+
+export function listOrderBySes(query) {
+  return request({
+    url: base_url + 'orders/admin/listBySession',
+    method: 'get',
+    params: {
+      pageSize: query.pageSize,
+      pageNum: query.pageNum,
+      orderBy: query.orderBy,
+      sessionId: query.sessionId
     }
   })
 }

@@ -56,7 +56,7 @@ export default {
       page: {
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'id ASC'
+        orderBy: 'startTime ASC'
       },
       sessions: [],
       sessionLoading: false

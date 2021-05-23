@@ -42,3 +42,23 @@ export function listByCinema(cinemaId) {
     method: 'get'
   })
 }
+
+export function getDetail(movieid) {
+  return request({
+    url: base_url + 'admin/movies/detail',
+    params: {
+      id : movieid
+    },
+    method: 'get'
+  })
+}
+
+export function getDetailAsync(movieId) {
+  return new Promise((resolve, reject) => {
+    getDetail(movieId).then(res => {
+      resolve(res.data)
+    }).then(err => {
+      reject(err)
+    })
+  })
+}

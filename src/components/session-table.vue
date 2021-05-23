@@ -61,7 +61,7 @@ export default {
       this.$router.push({
         name: 'Detail',
         params: {
-          sessionId: 1
+          sessionId: sessionId
         }
       })
     }

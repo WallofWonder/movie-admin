@@ -35,7 +35,7 @@ export function getHallSession(id) {
 export function getHallSessionAsync(id) {
   return new Promise((resolve, reject) => {
     getHallSession(id).then(res => {
-      resolve(res.data.data)
+      resolve(res.data)
     }).catch(err => {
       reject(err)
     })

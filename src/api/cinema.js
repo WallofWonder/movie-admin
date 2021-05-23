@@ -49,7 +49,7 @@ export function getCinema(cinemaid) {
 export function getCinemaAsync(cinemaId) {
   return new Promise((resolve, reject) => {
     getCinema(cinemaId).then(res => {
-      resolve(res.data.data)
+      resolve(res.data)
     }).catch(err => {
       reject(err)
     })
