@@ -32,3 +32,13 @@ export function updateMovie(body) {
     data: body
   })
 }
+
+export function listByCinema(cinemaId) {
+  return request({
+    url: base_url + 'admin/movies/listbycinema',
+    params: {
+      cinemaid: cinemaId
+    },
+    method: 'get'
+  })
+}

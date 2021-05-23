@@ -24,11 +24,6 @@
       stripe
       highlight-current-row
     >
-      <el-table-column prop="id" align="center" label="编号" width="95">
-        <template slot-scope="{row}">
-          {{ row.id }}
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="名称">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.dbName }}</span>
@@ -52,16 +47,21 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+      <el-table-column align="center" label="创建时间" width="200">
         <template slot-scope="{row}">
           <i class="el-icon-time" />
           <span>{{ row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="修改时间" width="200">
+      <el-table-column align="center" label="修改时间" width="200">
         <template slot-scope="{row}">
           <i class="el-icon-time" />
           <span>{{ row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="160">
+        <template slot-scope="{row}">
+          <el-button class="el-icon-video-camera-solid" @click="toSession(row.id)"> 查看排片情况</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,6 +170,14 @@ export default {
     this.getList()
   },
   methods: {
+    toSession(cinemaId) {
+      this.$router.push({
+        name: 'SessionIndex',
+        params: {
+          cinemaId: cinemaId
+        }
+      })
+    },
     getList() {
       this.listLoading = true
       list(this.query).then(response => {

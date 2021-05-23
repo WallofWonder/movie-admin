@@ -129,11 +129,20 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/session/list',
     name: 'session',
+    meta: { title: '场次管理', icon: 'cinema' },
     children: [{
-      path: 'index',
-      name: 'Index',
+      path: 'index/:cinemaId',
+      name: 'SessionIndex',
+      props: route => ({ cinemaId: route.params.cinemaId }),
       component: () => import('@/views/session/index'),
       meta: { title: '场次管理', icon: 'cinema' }
+    },
+    {
+      path: 'detail/:sessionId',
+      name: 'Detail',
+      component: () => import('@/views/session/detail'),
+      props: route => ({ sessionId: route.params.sessionId }),
+      meta: { title: '场次详情', icon: 'cinema' }
     }]
   },
 
