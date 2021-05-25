@@ -24,6 +24,11 @@
       stripe
       highlight-current-row
     >
+      <el-table-column align="center" label="编号" width="100">
+        <template slot-scope="{row}">
+          <span>{{ row.id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="名称">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.dbName }}</span>
