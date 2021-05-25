@@ -45,13 +45,6 @@
           {{ row.actor }}
         </template>
       </el-table-column>
-      <!--      <el-table-column align="center" label="状态" width="100px">-->
-      <!--        <template slot-scope="{row}">-->
-      <!--          <el-tag :type="row.isShow | statusFilter">-->
-      <!--            {{ row.isShow === true ? '在映中' : '未在映' }}-->
-      <!--          </el-tag>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
       <el-table-column align="center" label="评分" width="100">
         <template slot-scope="scope">
           <em v-if="scope.row.rate !== null" style="color: #ff9900;font-size: 20px">
@@ -86,8 +79,8 @@
     />
 
     <el-dialog title="编辑电影信息" :visible.sync="dialogFormVisible" width="600px">
-      <el-form :model="form" :rules="rules">
-        <el-form-item label="片名" prop="dbname">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="片名" prop="dbName">
           <el-input v-model="form.dbName" autocomplete="off" />
         </el-form-item>
         <el-form-item label="导演" prop="director">
@@ -163,9 +156,8 @@ export default {
         isShow: true
       },
       rules: {
-        dbname: [
-          { required: true, message: '请输入片名', trigger: 'blur' },
-          { min: 1, message: '长度至少为1个字符', trigger: 'blur' }
+        dbName: [
+          { required: true, message: '请输入片名', trigger: 'blur' }
         ]
       },
       // 分页参数 + 搜索标题
@@ -193,7 +185,6 @@ export default {
       })
     },
     pageChanged() {
-      console.log(this.listQuery.pageNum)
     },
     // 执行过滤，重置为第一页
     handleFilter() {
@@ -222,16 +213,22 @@ export default {
       this.dialogFormVisible = true
     },
     updateData(form) {
-      form.updateTime = moment().format('YYYY-MM-DD HH:mm:ss')
-      updateMovie(form).then(() => {
-        Message({
-          message: '更新成功!',
-          type: 'success',
-          duration: 3 * 1000
-        })
-        this.getList()
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          form.updateTime = moment().format('YYYY-MM-DD HH:mm:ss')
+          updateMovie(form).then(() => {
+            Message({
+              message: '更新成功!',
+              type: 'success',
+              duration: 3 * 1000
+            })
+            this.getList()
+          })
+          this.dialogFormVisible = false
+        } else {
+          this.$message.error('请输入片名')
+        }
       })
-      this.dialogFormVisible = false
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort // 'id asc'

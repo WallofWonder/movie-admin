@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <h1 class=" el-icon-user"> 账户管理</h1>
-    <p>共 {{ list.length }} 条数据</p>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -62,8 +61,17 @@
       :limit.sync="query.pageSize"
       @pagination="fetchData"
     />
-    <el-dialog title="编辑用户信息" :visible.sync="dialogFormVisible" width="500px">
-      <el-form :model="form">
+    <el-dialog
+      title="编辑用户信息"
+      :visible.sync="dialogFormVisible"
+      width="500px"
+      @close="handleClose"
+    >
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="formRules"
+      >
         <el-form-item label="头像">
           <el-image class="avatar" :src="baseImg + form.headPic" />
           <el-button type="primary" size="mini" @click="setDefaultImg">删除头像</el-button>
@@ -74,7 +82,7 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="性别" prop="nickname">
+        <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="form.sex">
             <el-radio :label="1"><span class="el-icon-male" />男</el-radio>
             <el-radio :label="0"><span class="el-icon-female" />女</el-radio>
@@ -131,7 +139,17 @@ export default {
         orderBy: 'id ASC'
       },
       dialogFormVisible: false,
-      form: {}
+      form: {},
+      formRules: {
+        nickname: [
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在1-20之间', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱格式' }
+        ]
+      }
     }
   },
   created() {
@@ -177,13 +195,22 @@ export default {
       this.form.headPic = global.DEFAULT_AVATAR
     },
     updateData() {
-      updateAccount(this.form).then(() => {
-        this.$message.success('更新成功')
-        this.fetchData()
-        this.dialogFormVisible = false
-      }).catch(() => {
-        this.dialogFormVisible = false
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          updateAccount(this.form).then(() => {
+            this.$message.success('更新成功')
+            this.fetchData()
+            this.dialogFormVisible = false
+          }).catch(() => {
+            this.dialogFormVisible = false
+          })
+        } else {
+          this.$message.error('请填写正确的表单信息')
+        }
       })
+    },
+    handleClose() {
+      this.$refs['form'].resetFields()
     }
   }
 }

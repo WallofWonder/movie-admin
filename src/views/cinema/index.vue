@@ -76,14 +76,14 @@
     />
 
     <el-dialog title="编辑影院信息" :visible.sync="dialogFormVisible" width="600px">
-      <el-form :model="form" :rules="rules">
-        <el-form-item label="名称" prop="dbname">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="名称" prop="dbName">
           <el-input v-model="form.dbName" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="地址" prop="dbname">
+        <el-form-item label="地址" prop="address">
           <el-input v-model="form.address" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="服务" prop="dbname">
+        <el-form-item label="服务">
           <el-tag
             v-for="(tag, i) in form.cinemaService"
             :key="i"
@@ -148,7 +148,14 @@ export default {
       // 对话框表单
       dialogFormVisible: false,
       form: {},
-      rules: {},
+      rules: {
+        dbName: [
+          { required: true, message: '请输入片名', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '请输入地址', trigger: 'blur' }
+        ]
+      },
       // 分页参数 + 搜索标题
       query: {
         pageSize: 10,
@@ -215,20 +222,26 @@ export default {
       this.dialogFormVisible = true
     },
     updateData(form) {
-      if (form.cinemaService.length !== 0) {
-        form.cinemaService = form.cinemaService.join(' ')
-      }
-      updateCinema(form).then(() => {
-        Message({
-          message: '更新成功!',
-          type: 'success',
-          duration: 3 * 1000
-        })
-        this.reload()
-      }).catch(() => {
-        this.$message.error('更新失败')
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          if (form.cinemaService.length !== 0) {
+            form.cinemaService = form.cinemaService.join(' ')
+          }
+          updateCinema(form).then(() => {
+            Message({
+              message: '更新成功!',
+              type: 'success',
+              duration: 3 * 1000
+            })
+            this.reload()
+          }).catch(() => {
+            this.$message.error('更新失败')
+          })
+          this.dialogFormVisible = false
+        } else {
+          this.$message.error('请输入正确的影院信息')
+        }
       })
-      this.dialogFormVisible = false
     },
     reload() {
       this.query.pageNum = 1
